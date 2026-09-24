@@ -7,6 +7,11 @@ A production-quality full-stack developer portfolio built with the MERN stack.
 - **Frontend**: React, Vite, Tailwind CSS, Framer Motion, React Router, Lucide React
 - **Backend**: Node.js, Express.js, MongoDB, Mongoose, Nodemailer
 
+## Live Links
+
+- **Frontend Application**: [https://portfolio-frontend-ricr.vercel.app/](https://portfolio-frontend-ricr.vercel.app/)
+- **Backend API**: [https://portfolio-server-43tu.onrender.com](https://portfolio-server-43tu.onrender.com)
+
 ## Structure
 
 The project is structured as a monorepo:
