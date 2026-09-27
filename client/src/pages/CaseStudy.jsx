@@ -8,6 +8,7 @@ import { Container } from '../components/ui/Container';
 import { Heading, Text } from '../components/ui/Typography';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
+import SEO from '../components/SEO';
 
 const FADE_UP = {
   hidden: { opacity: 0, y: 20 },
@@ -62,6 +63,12 @@ export default function CaseStudy() {
 
   return (
     <div className="min-h-screen bg-background pb-24">
+      <SEO 
+        title={`${project.title} | Case Study`} 
+        description={caseStudy.summary || project.shortDescription}
+        image={imageUrl}
+        type="article"
+      />
       {/* Navigation Bar */}
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
         <Container>

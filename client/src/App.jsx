@@ -22,10 +22,16 @@ import { Maintenance } from './pages/Maintenance';
 import { PortfolioIntroLoader } from './components/layout/PortfolioIntroLoader';
 import PortfolioAssistant from './components/PortfolioAssistant/PortfolioAssistant';
 import CaseStudy from './pages/CaseStudy';
+import SEO from './components/SEO';
 
+const hexToRgb = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '59, 130, 246';
+};
 
 const MainLayout = () => (
   <>
+    <SEO />
     <Navbar />
     <Hero />
     <About />
@@ -63,7 +69,20 @@ function App() {
       try {
         const res = await getPublicSettings();
         if (res?.data?.success) {
-          setSettings(res.data.data);
+          const fetchedSettings = res.data.data;
+          setSettings(fetchedSettings);
+          
+          // Apply custom theming dynamically
+          if (fetchedSettings.themePrimaryColor) {
+            document.documentElement.style.setProperty('--color-primary', fetchedSettings.themePrimaryColor);
+            document.documentElement.style.setProperty('--color-primary-rgb', hexToRgb(fetchedSettings.themePrimaryColor));
+          }
+          if (fetchedSettings.themeSecondaryColor) {
+            document.documentElement.style.setProperty('--color-secondary', fetchedSettings.themeSecondaryColor);
+          }
+          if (fetchedSettings.themeFontFamily) {
+            document.documentElement.style.setProperty('--font-sans', `"${fetchedSettings.themeFontFamily}", sans-serif`);
+          }
         }
       } catch (err) {
         console.error("Failed to load settings:", err);
