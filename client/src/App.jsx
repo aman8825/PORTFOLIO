@@ -22,6 +22,8 @@ import { Maintenance } from './pages/Maintenance';
 import { PortfolioIntroLoader } from './components/layout/PortfolioIntroLoader';
 import PortfolioAssistant from './components/PortfolioAssistant/PortfolioAssistant';
 import CaseStudy from './pages/CaseStudy';
+import Blog from './pages/Blog';
+import ArticleView from './pages/ArticleView';
 import SEO from './components/SEO';
 
 const hexToRgb = (hex) => {
@@ -128,6 +130,22 @@ function App() {
             <Routes>
               <Route path="/" element={<MainLayout />} />
               <Route path="/project/:slug" element={<CaseStudy />} />
+              <Route path="/blog" element={
+                <>
+                  <SEO />
+                  <Navbar />
+                  <Blog />
+                  <Footer />
+                </>
+              } />
+              <Route path="/blog/:slug" element={
+                <>
+                  <SEO />
+                  <Navbar />
+                  <ArticleView />
+                  <Footer />
+                </>
+              } />
             </Routes>
           )}
         </motion.div>

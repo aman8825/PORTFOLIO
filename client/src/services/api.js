@@ -23,6 +23,10 @@ export const getExperiences = () => api.get('/experience?public=true');
 // Achievements
 export const getAchievements = () => api.get('/achievements?public=true');
 
+// Articles
+export const getArticles = () => api.get('/articles?isPublished=true');
+export const getArticleBySlug = (slug) => api.get(`/articles/slug/${slug}`);
+
 // AI Assistant
 export const askAssistant = (data) => api.post('/assistant/ask', data);
 

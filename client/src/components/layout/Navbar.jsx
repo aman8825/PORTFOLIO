@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useScrollPosition } from '../../hooks/useScrollPosition';
 import { useActiveSection } from '../../hooks/useActiveSection';
@@ -15,6 +16,8 @@ export const Navbar = () => {
   const { profile } = useProfile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isScrolled = useScrollPosition();
+  const location = useLocation();
+  const navigate = useNavigate();
   
   // Track active section. Strip '#' from hrefs for the hook
   const sectionIds = NAV_LINKS.map(link => link.href);
@@ -22,6 +25,15 @@ export const Navbar = () => {
 
   const handleScrollTo = (e, href) => {
     e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate(`/${href}`);
+      // Wait for navigation then scroll
+      setTimeout(() => {
+        const element = document.getElementById(href.replace('#', ''));
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    }
     const element = document.getElementById(href.replace('#', ''));
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -46,24 +58,28 @@ export const Navbar = () => {
         <Container className="flex items-center justify-between">
           
           {/* Logo / Wordmark */}
-          <a 
-            href="#top" 
-            onClick={(e) => handleScrollTo(e, '#top')}
+          <Link 
+            to="/" 
+            onClick={(e) => {
+              if (location.pathname === '/') handleScrollTo(e, '#top');
+            }}
             className="text-xl font-display font-bold tracking-tight text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 rounded-sm"
             aria-label={`${profile?.basic?.fullName || 'Portfolio'} Home`}
           >
             {profile?.basic?.fullName || 'Aman Kumar'}<span className="text-primary/50">.</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1 lg:space-x-4" aria-label="Main Navigation">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.href.replace('#', '');
               return (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleScrollTo(e, link.href)}
+                  to={link.href.startsWith('#') ? `/${link.href}` : link.href}
+                  onClick={(e) => {
+                    if (link.href.startsWith('#')) handleScrollTo(e, link.href);
+                  }}
                   className={cn(
                     "px-3 py-2 text-sm font-medium transition-colors relative rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20",
                     isActive ? "text-primary" : "text-primary/60 hover:text-primary"
@@ -78,7 +94,7 @@ export const Navbar = () => {
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </a>
+                </Link>
               );
             })}
           </nav>
