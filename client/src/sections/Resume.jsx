@@ -7,10 +7,15 @@ import { Text } from '../components/ui/Typography';
 import { Button } from '../components/ui/Button';
 import { FADE_UP, STAGGER_CONTAINER } from '../animations/variants';
 import { useProfile } from '../context/ProfileContext';
+import { trackAnalyticsEvent } from '../services/api';
 
 export const ResumeSection = () => {
   const { profile } = useProfile();
   const resumeUrl = profile?.resume?.url || '/resume.pdf';
+
+  const handleResumeInteraction = () => {
+    trackAnalyticsEvent({ eventType: 'resume_download' }).catch(console.error);
+  };
 
   return (
     <section id="resume" className="py-24 relative overflow-hidden">
@@ -40,6 +45,7 @@ export const ResumeSection = () => {
                   download={profile?.resume?.fileName || "Aman_Kumar_Resume.pdf"}
                   className="group flex items-center gap-2"
                   aria-label="Download Resume"
+                  onClick={handleResumeInteraction}
                 >
                   <Download className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
                   Download PDF
@@ -53,6 +59,7 @@ export const ResumeSection = () => {
                   variant="secondary"
                   className="group flex items-center gap-2"
                   aria-label="Open Resume in new tab"
+                  onClick={handleResumeInteraction}
                 >
                   <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   Open in Browser

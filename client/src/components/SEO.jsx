@@ -7,18 +7,19 @@ const SEO = ({
   image, 
   url, 
   type = 'website',
-  author = 'Aman'
+  author = 'Aman',
+  seoSettings = null
 }) => {
-  const siteTitle = 'Aman | Portfolio';
+  const siteTitle = seoSettings?.seoMetaTitle || 'Aman | Portfolio';
   const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   
-  const defaultDescription = "Aman's professional portfolio and showcase. Discover my projects, skills, and experience in web development.";
+  const defaultDescription = seoSettings?.seoMetaDescription || "Aman's professional portfolio and showcase. Discover my projects, skills, and experience in web development.";
   const metaDescription = description || defaultDescription;
   
   const siteUrl = import.meta.env.VITE_APP_URL || window.location.origin;
   const canonicalUrl = url ? `${siteUrl}${url}` : siteUrl;
   
-  const metaImage = image || `${siteUrl}/og-default.jpg`; // Fallback image
+  const metaImage = image || seoSettings?.seoOpenGraphImage || `${siteUrl}/og-default.jpg`; // Fallback image
 
   return (
     <Helmet>
@@ -41,6 +42,25 @@ const SEO = ({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDescription} />
       <meta name="twitter:image" content={metaImage} />
+
+      {seoSettings?.seoTwitterHandle && (
+        <meta name="twitter:site" content={seoSettings.seoTwitterHandle} />
+      )}
+      
+      {seoSettings?.seoEnableJsonLd && (
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org/",
+              "@type": "Person",
+              "name": "${author}",
+              "url": "${canonicalUrl}",
+              "jobTitle": "Full-Stack MERN Developer",
+              "sameAs": []
+            }
+          `}
+        </script>
+      )}
     </Helmet>
   );
 };

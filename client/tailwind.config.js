@@ -12,16 +12,16 @@ export default {
         "surface-hover": "#1a1a1a",
         border: "#222222",
         primary: {
-          DEFAULT: "#ffffff",
-          muted: "#a1a1aa",
+          DEFAULT: "rgb(var(--color-primary-rgb, 255 255 255) / <alpha-value>)",
+          muted: "rgb(var(--color-primary-rgb, 255 255 255) / 0.6)",
         },
         accent: {
-          DEFAULT: "#e4e4e7",
-          hover: "#ffffff",
+          DEFAULT: "var(--color-secondary, #e4e4e7)",
+          hover: "var(--color-secondary, #ffffff)",
         }
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["var(--font-sans, Inter)", "sans-serif"],
         display: ["Space Grotesk", "sans-serif"],
       },
       fontSize: {

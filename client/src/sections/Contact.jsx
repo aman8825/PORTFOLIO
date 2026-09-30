@@ -70,6 +70,11 @@ export const Contact = () => {
       if (response.ok && data.success) {
         setStatus('success');
         setFormData({ name: '', email: '', subject: '', message: '', _honeypot: '' });
+        
+        // Track contact submission
+        import('../services/api').then(({ trackAnalyticsEvent }) => {
+          trackAnalyticsEvent({ eventType: 'contact_submission' }).catch(console.error);
+        });
       } else {
         setStatus('error');
         if (data.errors) {

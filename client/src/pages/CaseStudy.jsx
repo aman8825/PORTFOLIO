@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, FileText, CheckCircle2 } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
-import { getProjectBySlug } from '../services/api';
+import { getProjectBySlug, trackAnalyticsEvent } from '../services/api';
 import { Container } from '../components/ui/Container';
 import { Heading, Text } from '../components/ui/Typography';
 import { Button } from '../components/ui/Button';
@@ -26,6 +26,10 @@ export default function CaseStudy() {
         const res = await getProjectBySlug(slug);
         if (res.data.success) {
           setProject(res.data.data);
+          trackAnalyticsEvent({
+            eventType: 'project_view',
+            metadata: { projectId: res.data.data._id }
+          }).catch(console.error);
         } else {
           setProject(null);
         }

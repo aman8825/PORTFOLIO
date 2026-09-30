@@ -28,12 +28,12 @@ import SEO from './components/SEO';
 
 const hexToRgb = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '59, 130, 246';
+  return result ? `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}` : '59 130 246';
 };
 
-const MainLayout = () => (
+const MainLayout = ({ settings }) => (
   <>
-    <SEO />
+    <SEO seoSettings={settings} />
     <Navbar />
     <Hero />
     <About />
@@ -60,6 +60,8 @@ const MainLayout = () => (
   </>
 );
 
+import RecruiterLayout from './pages/Recruiter';
+
 function App() {
   const [settings, setSettings] = useState(null);
   const [apiReady, setApiReady] = useState(false);
@@ -84,6 +86,14 @@ function App() {
           }
           if (fetchedSettings.themeFontFamily) {
             document.documentElement.style.setProperty('--font-sans', `"${fetchedSettings.themeFontFamily}", sans-serif`);
+            
+            const font = fetchedSettings.themeFontFamily;
+            if (font && !['Inter', 'Space Grotesk'].includes(font)) {
+              const link = document.createElement('link');
+              link.href = `https://fonts.googleapis.com/css2?family=${font.replace(/\s+/g, '+')}:wght@400;500;600;700&display=swap`;
+              link.rel = 'stylesheet';
+              document.head.appendChild(link);
+            }
           }
         }
       } catch (err) {
@@ -93,6 +103,11 @@ function App() {
       }
     };
     fetchSettings();
+
+    // Track page view
+    import('./services/api').then(({ trackAnalyticsEvent }) => {
+      trackAnalyticsEvent({ eventType: 'page_view' }).catch(console.error);
+    });
   }, []);
 
   const showMaintenance = settings?.maintenanceMode;
@@ -128,11 +143,12 @@ function App() {
             />
           ) : (
             <Routes>
-              <Route path="/" element={<MainLayout />} />
+              <Route path="/" element={<MainLayout settings={settings} />} />
+              <Route path="/recruiter" element={<RecruiterLayout settings={settings} />} />
               <Route path="/project/:slug" element={<CaseStudy />} />
               <Route path="/blog" element={
                 <>
-                  <SEO />
+                  <SEO seoSettings={settings} />
                   <Navbar />
                   <Blog />
                   <Footer />
@@ -140,7 +156,7 @@ function App() {
               } />
               <Route path="/blog/:slug" element={
                 <>
-                  <SEO />
+                  <SEO seoSettings={settings} />
                   <Navbar />
                   <ArticleView />
                   <Footer />

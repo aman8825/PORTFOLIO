@@ -30,4 +30,7 @@ export const getArticleBySlug = (slug) => api.get(`/articles/slug/${slug}`);
 // AI Assistant
 export const askAssistant = (data) => api.post('/assistant/ask', data);
 
+// Analytics
+export const trackAnalyticsEvent = (data) => api.post('/analytics/track', data);
+
 export default api;
